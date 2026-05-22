@@ -33,6 +33,7 @@ PYTHON_DOCS_URLS = [
     # Advanced
     "https://docs.python.org/3/reference/datamodel.html",
     "https://docs.python.org/3/library/asyncio-task.html",
+    "https://docs.python.org/3/library/asyncio-eventloop.html",
     "https://docs.python.org/3/library/concurrent.futures.html",
     "https://docs.python.org/3/library/itertools.html",
     "https://docs.python.org/3/library/functools.html",
