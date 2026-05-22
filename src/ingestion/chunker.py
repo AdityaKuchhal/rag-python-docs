@@ -19,8 +19,8 @@ import logging
 
 logger = logging.getLogger(__name__)
 
-# Tunable — we'll run experiments on these in Sprint 2
-CHUNK_SIZE = 1000        # characters (not tokens — tiktoken conversion in Sprint 2)
+
+CHUNK_SIZE = 1000        # characters (not tokens)
 CHUNK_OVERLAP = 100      # characters
 MIN_CHUNK_LENGTH = 50    # discard noise chunks shorter than this
 
@@ -46,7 +46,7 @@ def _clean_text(text: str) -> str:
     text = re.sub(r'Â¶|¶', '', text)
     # Collapse 3+ newlines to 2
     text = re.sub(r'\n{3,}', '\n\n', text)
-    # Collapse multiple spaces (but not leading indent — preserves code)
+    # Collapse multiple spaces 
     text = re.sub(r'[ \t]{3,}', '  ', text)
     return text.strip()
 

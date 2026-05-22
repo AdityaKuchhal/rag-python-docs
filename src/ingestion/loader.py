@@ -29,7 +29,7 @@ PYTHON_DOCS_URLS = [
     "https://docs.python.org/3/tutorial/stdlib.html",
     "https://docs.python.org/3/tutorial/stdlib2.html",
     "https://docs.python.org/3/howto/functional.html",
-    "https://docs.python.org/3/howto/decorators.html",
+    "https://docs.python.org/3/howto/descriptor.html",
     # Advanced
     "https://docs.python.org/3/reference/datamodel.html",
     "https://docs.python.org/3/library/asyncio-task.html",
