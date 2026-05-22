@@ -1,0 +1,4 @@
+Strategy,Chunk Size,Overlap,Total Chunks,Avg Length,Description
+small_512,500,50,1917,406,"Small chunks — high precision, low context"
+medium_1000,1000,100,1033,759,Medium chunks — baseline (current production)
+large_1500,1500,150,692,1121,"Large chunks — more context, lower precision"
