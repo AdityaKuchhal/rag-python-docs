@@ -27,21 +27,22 @@ high-level functions like asyncio.run()...
 
 ## Architecture
 
-```
-┌─────────────────────────────────────────────────────────────────────┐
-│                        INGESTION PIPELINE                            │
-│                                                                     │
-│  docs.python.org ──► loader.py ──► chunker.py ──► embedder.py ──► Pinecone │
-│    19 pages           clean text    1,023 chunks   1536-dim         vector  │
-│                                                    vectors          index   │
-└─────────────────────────────────────────────────────────────────────┘
+```mermaid
+flowchart LR
+    subgraph INGESTION["🔄 Ingestion Pipeline"]
+        A[docs.python.org\n19 pages] --> B[loader.py\nclean text]
+        B --> C[chunker.py\n1,023 chunks]
+        C --> D[embedder.py\n1536-dim vectors]
+        D --> E[(Pinecone\nvector index)]
+    end
 
-┌─────────────────────────────────────────────────────────────────────┐
-│                          QUERY PIPELINE                              │
-│                                                                     │
-│  Question ──► embed query ──► Pinecone search ──► top-k chunks ──► GPT-4o ──► Answer │
-│              (same model)     cosine similarity    + metadata      grounded           │
-└─────────────────────────────────────────────────────────────────────┘
+    subgraph QUERY["🔍 Query Pipeline"]
+        F[Question] --> G[embed query\nsame model]
+        G --> H[Pinecone search\ncosine similarity]
+        H --> I[top-k chunks\n+ metadata]
+        I --> J[GPT-4o\ngrounded]
+        J --> K[Answer]
+    end
 ```
 
 ---

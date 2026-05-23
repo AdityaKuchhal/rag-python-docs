@@ -126,6 +126,7 @@ def load_python_docs(
             logger.info(f"Fetching: {url}")
             response = requests.get(url, timeout=timeout, headers=headers)
             response.raise_for_status()
+            response.encoding = "utf-8"  # force UTF-8 — prevents Latin-1 mis-decode of em-dashes
 
             doc = _parse_page(response.text, url)
             if doc:
