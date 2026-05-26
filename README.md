@@ -93,15 +93,15 @@ rag-python-docs/
 
 ## Corpus
 
-19 curated pages from `docs.python.org`, covering beginner through advanced Python:
+21 curated pages from `docs.python.org`, covering beginner through advanced Python:
 
 | Section | Pages |
 |---|---|
 | Beginner | Introduction, Control Flow, Data Structures, Modules, I/O, Errors, Classes |
 | Intermediate | Standard Library I & II |
-| Advanced | Functional Programming, Descriptors, Data Model, asyncio Tasks, asyncio Event Loop, concurrent.futures, itertools, functools, typing, contextlib |
+| Advanced | Functional Programming, Descriptors, Data Model, asyncio Tasks, asyncio Event Loop, concurrent.futures, itertools, functools, typing, contextlib, Glossary, Compound Statements |
 
-**Ingestion stats:** 19 documents → 1,021 chunks → 1,021 vectors @ 1536 dims
+**Ingestion stats:** 21 documents → 1,181 chunks → 1,183 vectors @ 1536 dims
 
 ---
 
@@ -144,9 +144,9 @@ python scripts/ingest.py
 Expected output:
 ```json
 {
-  "chunks_processed": 1021,
-  "chunks_embedded": 1021,
-  "vectors_upserted": 1021,
+  "chunks_processed": 1181,
+  "chunks_embedded": 1181,
+  "vectors_upserted": 1183,
   "status": "success"
 }
 ```
@@ -251,7 +251,7 @@ arm64 (Graviton2) is ~20% cheaper and often faster for I/O-bound workloads like 
 
 | Operation | Cost |
 |---|---|
-| Full corpus ingestion (1,021 chunks) | ~$0.004 |
+| Full corpus ingestion (1,181 chunks) | ~$0.005 |
 | Per query (embedding + GPT-4o) | ~$0.002–0.008 |
 | Pinecone Serverless storage | Free tier (2GB) |
 | AWS Lambda (warm, ~3.3s, 1024MB) | ~$0.00006 per query |
