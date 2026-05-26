@@ -1,0 +1,122 @@
+<svg viewBox="0 0 860 320" xmlns="http://www.w3.org/2000/svg" style="background:#0d1117;border-radius:12px;font-family:'JetBrains Mono',monospace">
+
+  <!-- Background panels -->
+  <rect x="16" y="16" width="400" height="288" rx="10" fill="#161b22" stroke="#21262d" stroke-width="1"/>
+  <rect x="444" y="16" width="400" height="288" rx="10" fill="#161b22" stroke="#21262d" stroke-width="1"/>
+
+  <!-- Panel labels -->
+  <text x="36" y="42" font-size="11" fill="#00e5a0" font-weight="600" letter-spacing="1">INGESTION PIPELINE</text>
+  <text x="464" y="42" font-size="11" fill="#7c8cfc" font-weight="600" letter-spacing="1">QUERY PIPELINE</text>
+
+  <!-- Divider line under labels -->
+  <line x1="36" y1="50" x2="400" y2="50" stroke="#21262d" stroke-width="1"/>
+  <line x1="464" y1="50" x2="828" y2="50" stroke="#21262d" stroke-width="1"/>
+
+  <!-- ─── INGESTION nodes ─── -->
+  <!-- docs.python.org -->
+  <rect x="36" y="66" width="140" height="46" rx="7" fill="#0d1117" stroke="#30363d" stroke-width="1"/>
+  <text x="106" y="85" font-size="11" fill="#e6edf3" text-anchor="middle">docs.python.org</text>
+  <text x="106" y="101" font-size="10" fill="#6e7681" text-anchor="middle">19 pages</text>
+
+  <!-- Arrow -->
+  <line x1="176" y1="89" x2="206" y2="89" stroke="#30363d" stroke-width="1.5" marker-end="url(#arr-gray)"/>
+
+  <!-- loader.py -->
+  <rect x="206" y="66" width="130" height="46" rx="7" fill="#0d1117" stroke="#30363d" stroke-width="1"/>
+  <text x="271" y="85" font-size="11" fill="#e6edf3" text-anchor="middle">loader.py</text>
+  <text x="271" y="101" font-size="10" fill="#6e7681" text-anchor="middle">clean text</text>
+
+  <!-- Down arrow from loader -->
+  <line x1="271" y1="112" x2="271" y2="136" stroke="#30363d" stroke-width="1.5" marker-end="url(#arr-gray)"/>
+
+  <!-- chunker.py -->
+  <rect x="206" y="136" width="130" height="46" rx="7" fill="#0d1117" stroke="#00e5a0" stroke-width="1"/>
+  <text x="271" y="155" font-size="11" fill="#00e5a0" text-anchor="middle">chunker.py</text>
+  <text x="271" y="171" font-size="10" fill="#6e7681" text-anchor="middle">1,021 chunks</text>
+
+  <!-- Down arrow from chunker -->
+  <line x1="271" y1="182" x2="271" y2="206" stroke="#30363d" stroke-width="1.5" marker-end="url(#arr-gray)"/>
+
+  <!-- embedder.py -->
+  <rect x="206" y="206" width="130" height="46" rx="7" fill="#0d1117" stroke="#30363d" stroke-width="1"/>
+  <text x="271" y="225" font-size="11" fill="#e6edf3" text-anchor="middle">embedder.py</text>
+  <text x="271" y="241" font-size="10" fill="#6e7681" text-anchor="middle">1536-dim vectors</text>
+
+  <!-- Arrow to Pinecone -->
+  <line x1="336" y1="229" x2="356" y2="229" stroke="#30363d" stroke-width="1.5" marker-end="url(#arr-gray)"/>
+
+  <!-- Pinecone -->
+  <rect x="356" y="206" width="44" height="46" rx="7" fill="#0d1117" stroke="#30363d" stroke-width="1"/>
+  <text x="378" y="227" font-size="9" fill="#6e7681" text-anchor="middle">Pine</text>
+  <text x="378" y="241" font-size="9" fill="#00e5a0" text-anchor="middle">cone</text>
+
+  <!-- model label -->
+  <rect x="36" y="206" width="140" height="46" rx="7" fill="#0d1117" stroke="#21262d" stroke-width="1" stroke-dasharray="4,3"/>
+  <text x="106" y="225" font-size="10" fill="#6e7681" text-anchor="middle">text-embedding</text>
+  <text x="106" y="241" font-size="10" fill="#6e7681" text-anchor="middle">-3-small</text>
+
+  <!-- Dotted arrow from model to embedder -->
+  <line x1="176" y1="229" x2="206" y2="229" stroke="#30363d" stroke-width="1" stroke-dasharray="3,3" marker-end="url(#arr-gray)"/>
+
+  <!-- ─── QUERY nodes ─── -->
+  <!-- Question -->
+  <rect x="464" y="66" width="110" height="46" rx="7" fill="#0d1117" stroke="#30363d" stroke-width="1"/>
+  <text x="519" y="85" font-size="11" fill="#e6edf3" text-anchor="middle">Question</text>
+  <text x="519" y="101" font-size="10" fill="#6e7681" text-anchor="middle">natural language</text>
+
+  <!-- Arrow -->
+  <line x1="574" y1="89" x2="600" y2="89" stroke="#30363d" stroke-width="1.5" marker-end="url(#arr-gray)"/>
+
+  <!-- Embed query -->
+  <rect x="600" y="66" width="110" height="46" rx="7" fill="#0d1117" stroke="#30363d" stroke-width="1"/>
+  <text x="655" y="85" font-size="11" fill="#e6edf3" text-anchor="middle">embed query</text>
+  <text x="655" y="101" font-size="10" fill="#6e7681" text-anchor="middle">same model</text>
+
+  <!-- Arrow down -->
+  <line x1="655" y1="112" x2="655" y2="136" stroke="#30363d" stroke-width="1.5" marker-end="url(#arr-gray)"/>
+
+  <!-- Pinecone search -->
+  <rect x="600" y="136" width="110" height="46" rx="7" fill="#0d1117" stroke="#7c8cfc" stroke-width="1"/>
+  <text x="655" y="155" font-size="11" fill="#7c8cfc" text-anchor="middle">Pinecone</text>
+  <text x="655" y="171" font-size="10" fill="#6e7681" text-anchor="middle">cosine similarity</text>
+
+  <!-- Arrow down -->
+  <line x1="655" y1="182" x2="655" y2="206" stroke="#30363d" stroke-width="1.5" marker-end="url(#arr-gray)"/>
+
+  <!-- GPT-4o -->
+  <rect x="600" y="206" width="110" height="46" rx="7" fill="#0d1117" stroke="#30363d" stroke-width="1"/>
+  <text x="655" y="225" font-size="11" fill="#e6edf3" text-anchor="middle">GPT-4o</text>
+  <text x="655" y="241" font-size="10" fill="#6e7681" text-anchor="middle">grounded answer</text>
+
+  <!-- Arrow down -->
+  <line x1="655" y1="252" x2="655" y2="272" stroke="#30363d" stroke-width="1.5" marker-end="url(#arr-gray)"/>
+
+  <!-- Answer -->
+  <rect x="600" y="272" width="110" height="28" rx="7" fill="#00e5a0" stroke="none"/>
+  <text x="655" y="291" font-size="11" fill="#0d1117" font-weight="600" text-anchor="middle">Answer</text>
+
+  <!-- top-k label -->
+  <rect x="464" y="136" width="110" height="46" rx="7" fill="#0d1117" stroke="#21262d" stroke-width="1" stroke-dasharray="4,3"/>
+  <text x="519" y="155" font-size="10" fill="#6e7681" text-anchor="middle">top-k chunks</text>
+  <text x="519" y="171" font-size="10" fill="#6e7681" text-anchor="middle">+ metadata</text>
+
+  <!-- Dotted arrow from top-k to GPT-4o -->
+  <line x1="574" y1="229" x2="600" y2="229" stroke="#30363d" stroke-width="1" stroke-dasharray="3,3" marker-end="url(#arr-gray)"/>
+
+  <!-- Dotted arrow from top-k label to Pinecone search -->
+  <line x1="519" y1="182" x2="519" y2="206" stroke="#21262d" stroke-width="1" stroke-dasharray="3,3"/>
+  <line x1="519" y1="206" x2="600" y2="229" stroke="#21262d" stroke-width="0"/>
+
+  <!-- FastAPI + Lambda badge -->
+  <rect x="464" y="260" width="110" height="36" rx="7" fill="#0d1117" stroke="#21262d" stroke-width="1"/>
+  <text x="519" y="275" font-size="10" fill="#6e7681" text-anchor="middle">FastAPI + Lambda</text>
+  <text x="519" y="289" font-size="9" fill="#6e7681" text-anchor="middle">API Gateway</text>
+
+  <!-- Arrow markers -->
+  <defs>
+    <marker id="arr-gray" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L6,3 z" fill="#30363d"/>
+    </marker>
+  </defs>
+
+</svg>

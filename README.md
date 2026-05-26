@@ -4,6 +4,8 @@ A production-ready **Retrieval-Augmented Generation (RAG)** pipeline that answer
 
 Built with Python, LangChain, OpenAI, Pinecone, FastAPI, and AWS Lambda.
 
+**Live demo:** [py-rag.vercel.app](https://py-rag.vercel.app)
+
 ---
 
 ## Demo
@@ -27,39 +29,26 @@ high-level functions like asyncio.run()...
 
 ## Architecture
 
-```mermaid
-flowchart LR
-    subgraph INGESTION["🔄 Ingestion Pipeline"]
-        A[docs.python.org\n19 pages] --> B[loader.py\nclean text]
-        B --> C[chunker.py\n1,023 chunks]
-        C --> D[embedder.py\n1536-dim vectors]
-        D --> E[(Pinecone\nvector index)]
-    end
-
-    subgraph QUERY["🔍 Query Pipeline"]
-        F[Question] --> G[embed query\nsame model]
-        G --> H[Pinecone search\ncosine similarity]
-        H --> I[top-k chunks\n+ metadata]
-        I --> J[GPT-4o\ngrounded]
-        J --> K[Answer]
-    end
-```
+<p align="center">
+<img src="docs/architecture.svg" alt="RAG Pipeline Architecture" width="860"/>
+</p>
 
 ---
 
 ## Stack
 
-| Layer            | Technology                                  | Purpose                            |
-| ---------------- | ------------------------------------------- | ---------------------------------- |
-| Document Loading | BeautifulSoup4, requests                    | Scrape + parse Python docs         |
-| Text Splitting   | LangChain RecursiveCharacterTextSplitter    | Chunk documents                    |
-| Embeddings       | OpenAI `text-embedding-3-small` (1536 dims) | Vectorize chunks + queries         |
-| Vector Store     | Pinecone Serverless (AWS us-east-1)         | Store + search vectors             |
-| LLM              | GPT-4o (`temperature=0`)                    | Grounded answer generation         |
-| Orchestration    | LangChain                                   | Pipeline coordination              |
-| API Layer        | FastAPI + Uvicorn                           | REST microservice                  |
-| Deployment       | AWS Lambda + API Gateway                    | Serverless cloud deployment        |
-| Evaluation       | RAGAS                                       | Retrieval + answer quality metrics |
+| Layer | Technology | Purpose |
+|---|---|---|
+| Document Loading | BeautifulSoup4, requests | Scrape + parse Python docs |
+| Text Splitting | LangChain RecursiveCharacterTextSplitter | Chunk documents |
+| Embeddings | OpenAI `text-embedding-3-small` (1536 dims) | Vectorize chunks + queries |
+| Vector Store | Pinecone Serverless (AWS us-east-1) | Store + search vectors |
+| LLM | GPT-4o (`temperature=0`) | Grounded answer generation |
+| Orchestration | LangChain | Pipeline coordination |
+| API Layer | FastAPI + Uvicorn + Mangum | REST microservice + Lambda adapter |
+| Deployment | AWS Lambda + API Gateway | Serverless cloud deployment |
+| Frontend | Vanilla HTML/CSS/JS | Chat UI deployed on Vercel |
+| Evaluation | RAGAS | Retrieval + answer quality metrics |
 
 ---
 
@@ -75,18 +64,27 @@ rag-python-docs/
 │   ├── retrieval/
 │   │   ├── retriever.py       # Dense vector similarity search
 │   │   └── qa_chain.py        # GPT-4o answer generation over chunks
-│   ├── api/                   # FastAPI service layer
-│   └── evaluation/            # RAGAS eval harness
+│   └── api/
+│       ├── main.py            # FastAPI app with lifespan management
+│       ├── schemas.py         # Pydantic request/response models
+│       └── lambda_handler.py  # Mangum adapter for AWS Lambda
 ├── scripts/
 │   ├── ingest.py              # End-to-end ingestion runner
-│   └── query.py               # CLI query interface
+│   ├── query.py               # CLI query interface
+│   └── deploy.sh              # One-command build + push + deploy
+├── docs/
+│   ├── index.html             # PyRAG chat UI
+│   └── architecture.svg       # Architecture diagram
 ├── notebooks/
 │   └── experiments/
-│       └── 01_chunking_strategies.ipynb   # Chunking strategy analysis
+│       └── 01_chunking_strategies.ipynb
 ├── infra/
-│   └── lambda/                # AWS deployment config
+│   └── lambda/
+│       └── Dockerfile
 ├── tests/
-├── .env.example
+│   ├── test_api.py
+│   └── test_retriever.py
+├── vercel.json
 ├── pyproject.toml
 └── requirements.txt
 ```
@@ -97,20 +95,19 @@ rag-python-docs/
 
 19 curated pages from `docs.python.org`, covering beginner through advanced Python:
 
-| Section      | Pages                                                                                                                                            |
-| ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------ |
-| Beginner     | Introduction, Control Flow, Data Structures, Modules, I/O, Errors, Classes                                                                       |
-| Intermediate | Standard Library I & II                                                                                                                          |
-| Advanced     | Functional Programming, Descriptors, Data Model, asyncio Tasks, asyncio Event Loop, concurrent.futures, itertools, functools, typing, contextlib |
+| Section | Pages |
+|---|---|
+| Beginner | Introduction, Control Flow, Data Structures, Modules, I/O, Errors, Classes |
+| Intermediate | Standard Library I & II |
+| Advanced | Functional Programming, Descriptors, Data Model, asyncio Tasks, asyncio Event Loop, concurrent.futures, itertools, functools, typing, contextlib |
 
-**Ingestion stats:** 19 documents → 1,023 chunks → 1,023 vectors @ 1536 dims
+**Ingestion stats:** 19 documents → 1,021 chunks → 1,021 vectors @ 1536 dims
 
 ---
 
 ## Quickstart
 
 ### Prerequisites
-
 - Python 3.11+
 - OpenAI API key (platform.openai.com — ~$0.004 to ingest full corpus)
 - Pinecone account (free Starter tier sufficient)
@@ -145,12 +142,11 @@ python scripts/ingest.py
 ```
 
 Expected output:
-
 ```json
 {
-  "chunks_processed": 1023,
-  "chunks_embedded": 1023,
-  "vectors_upserted": 1023,
+  "chunks_processed": 1021,
+  "chunks_embedded": 1021,
+  "vectors_upserted": 1021,
   "status": "success"
 }
 ```
@@ -177,7 +173,8 @@ python scripts/query.py "How do generators work?" --top-k 8
 
 | | |
 |---|---|
-| **Endpoint** | `https://gf3rbmi777.execute-api.us-east-1.amazonaws.com` |
+| **UI** | [py-rag.vercel.app](https://py-rag.vercel.app) |
+| **API** | `https://gf3rbmi777.execute-api.us-east-1.amazonaws.com` |
 | **Health** | `GET /health` |
 | **Query** | `POST /ask` |
 | **Infrastructure** | AWS Lambda (arm64, 1024MB) + API Gateway HTTP API |
@@ -202,23 +199,23 @@ curl -X POST https://gf3rbmi777.execute-api.us-east-1.amazonaws.com/ask \
 
 Experiment `01_chunking_strategies.ipynb` compared three chunking strategies across the same corpus:
 
-| Strategy        | Chunk Size      | Overlap | Total Chunks | Avg Length    |
-| --------------- | --------------- | ------- | ------------ | ------------- |
-| small_512       | 500 chars       | 50      | 1,917        | 406 chars     |
-| **medium_1000** | **1,000 chars** | **100** | **1,033**    | **759 chars** |
-| large_1500      | 1,500 chars     | 150     | 692          | 1,121 chars   |
+| Strategy | Chunk Size | Overlap | Total Chunks | Avg Length |
+|---|---|---|---|---|
+| small_512 | 500 chars | 50 | 1,917 | 406 chars |
+| **medium_1000** | **1,000 chars** | **100** | **1,033** | **759 chars** |
+| large_1500 | 1,500 chars | 150 | 692 | 1,121 chars |
 
 **Key finding:** All three strategies showed a hard spike at the chunk size ceiling — indicating Python docs paragraphs consistently exceed fixed chunk windows. The splitter is cutting mid-paragraph rather than at natural boundaries.
 
 **Retrieval scores (production index — medium_1000):**
 
-| Query              | Top-1 Score | Top-3 Avg |
-| ------------------ | ----------- | --------- |
-| asyncio event loop | 0.697       | 0.646     |
-| Python generators  | 0.621       | 0.585     |
-| metaclass          | 0.605       | 0.561     |
-| list vs tuple      | 0.584       | 0.542     |
-| Python decorator   | 0.487       | 0.480     |
+| Query | Top-1 Score | Top-3 Avg |
+|---|---|---|
+| asyncio event loop | 0.697 | 0.646 |
+| Python generators | 0.621 | 0.585 |
+| metaclass | 0.605 | 0.561 |
+| list vs tuple | 0.584 | 0.542 |
+| Python decorator | 0.487 | 0.480 |
 
 Decorator scored lowest (0.487) — consistent with the mid-paragraph cut hypothesis, as decorator explanations span ~1500 chars of contiguous prose. Follow-up experiment with `chunk_size=2000` planned.
 
@@ -242,15 +239,23 @@ Zero operational overhead, scales to zero when not in use, sufficient for this c
 **Why store chunk content in Pinecone metadata?**
 Avoids a secondary lookup to reconstruct the answer context. Tradeoff: metadata storage cost grows linearly with corpus size. Acceptable at this scale, revisit at 100k+ chunks.
 
+**Why AWS Lambda container image over zip deployment?**
+LangChain + dependencies exceed the 250MB zip limit. Container images support up to 10GB and give full control over the runtime environment.
+
+**Why arm64 over x86 on Lambda?**
+arm64 (Graviton2) is ~20% cheaper and often faster for I/O-bound workloads like this pipeline. No code changes required — Python is architecture-agnostic.
+
 ---
 
 ## Cost Breakdown
 
-| Operation                            | Cost            |
-| ------------------------------------ | --------------- |
-| Full corpus ingestion (1,023 chunks) | ~$0.004         |
-| Per query (embedding + GPT-4o)       | ~$0.002–0.008   |
-| Pinecone Serverless storage          | Free tier (2GB) |
+| Operation | Cost |
+|---|---|
+| Full corpus ingestion (1,021 chunks) | ~$0.004 |
+| Per query (embedding + GPT-4o) | ~$0.002–0.008 |
+| Pinecone Serverless storage | Free tier (2GB) |
+| AWS Lambda (warm, ~3.3s, 1024MB) | ~$0.00006 per query |
+| Vercel hosting (UI) | Free tier |
 
 ---
 
