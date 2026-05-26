@@ -978,6 +978,8 @@
       return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
     }
 
+    // Set initial history state so back button works from chat
+    history.replaceState({ view: 'welcome' }, '', '');
     checkHealth();
   </script>
 </body>
