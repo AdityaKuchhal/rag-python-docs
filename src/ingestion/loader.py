@@ -39,6 +39,8 @@ PYTHON_DOCS_URLS = [
     "https://docs.python.org/3/library/functools.html",
     "https://docs.python.org/3/library/typing.html",
     "https://docs.python.org/3/library/contextlib.html",
+    "https://docs.python.org/3/glossary.html",
+    "https://docs.python.org/3/reference/compound_stmts.html#function",
 ]
 
 
