@@ -173,6 +173,29 @@ python scripts/query.py "How do generators work?" --top-k 8
 
 ---
 
+## Live Deployment
+
+| | |
+|---|---|
+| **Endpoint** | `https://gf3rbmi777.execute-api.us-east-1.amazonaws.com` |
+| **Health** | `GET /health` |
+| **Query** | `POST /ask` |
+| **Infrastructure** | AWS Lambda (arm64, 1024MB) + API Gateway HTTP API |
+| **Cold start latency** | ~13s (container init + LangChain + Pinecone) |
+| **Warm latency** | ~3.3s (embedding + vector search + GPT-4o) |
+
+```bash
+# Health check
+curl https://gf3rbmi777.execute-api.us-east-1.amazonaws.com/health
+
+# Ask a question
+curl -X POST https://gf3rbmi777.execute-api.us-east-1.amazonaws.com/ask \
+  -H "Content-Type: application/json" \
+  -d '{"question": "How does asyncio event loop work?", "top_k": 5}'
+```
+
+---
+
 ## Experiments
 
 ### Chunking Strategy Comparison
